@@ -1,0 +1,27 @@
+{
+  "name": "fullstack-backend",
+  "version": "1.0.0",
+  "description": "fullstack backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yarviz/fullstack-backend.git"
+  },
+  "author": "Yarviz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yarviz/fullstack-backend/issues"
+  },
+  "homepage": "https://github.com/Yarviz/fullstack-backend#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3"
+  }
+}
