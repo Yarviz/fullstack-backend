@@ -1,10 +1,21 @@
 require('dotenv').config();
 const express = require('express');
+const morgan = require('morgan');
+var bodyparser = require('body-parser')
 const userdata = require('./userdata.json');
 
 const port = process.env.PORT;
 const app = express();
 const ID_RANGE = 100000000;
+
+morgan.token('content', (req, res) => {
+    const cont = JSON.stringify(req.body)
+    if (cont) return cont
+    else return "{}";
+});
+
+app.use(bodyparser.json());
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'));
 
 app.get('/api/persons', (req, res) => {
     console.log(userdata);
@@ -12,9 +23,9 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.post('/api/persons', (req, res) => {
-    console.log(req.query)
-    const name = req.query.name;
-    const number = req.query.number;
+    console.log(req.body)
+    const name = req.body.name;
+    const number = req.body.number;
     if (!name || !number) {
         return res.status(400).send(`required params name and number in request`);
     }
