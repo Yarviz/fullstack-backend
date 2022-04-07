@@ -15,6 +15,7 @@ morgan.token('content', (req, res) => {
     else return "{}";
 });
 
+app.use(express.static('build'))
 app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'));
