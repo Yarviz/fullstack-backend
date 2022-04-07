@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 var bodyparser = require('body-parser')
 const userdata = require('./userdata.json');
+const cors = require('cors')
 
 const port = process.env.PORT;
 const app = express();
@@ -14,6 +15,7 @@ morgan.token('content', (req, res) => {
     else return "{}";
 });
 
+app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'));
 
@@ -33,7 +35,7 @@ app.post('/api/persons', (req, res) => {
         return res.status(409).send(`name must be unique`);
     }
     userdata.push({name, number, id: Math.floor(Math.random() * ID_RANGE)})
-    res.status(200).send(`added name ${name} in phonebook`);
+    res.status(200).json(userdata[userdata.length - 1]);
 })
 
 app.get('/api/persons/:id', (req, res) => {
