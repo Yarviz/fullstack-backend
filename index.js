@@ -20,8 +20,10 @@ const errorHandler = (error, req, res, next) => {
     console.error(error.message)
     if (error.name === 'CastError') {
         return res.status(400).json({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+        return res.status(400).json({ error: error.message })
     } else {
-        return res.status(500).send({ error: 'internal server error' })
+        return res.status(500).json({ error: 'internal server error' })
     }
 }
 
@@ -43,9 +45,9 @@ app.post('/api/persons', (req, res, next) => {
     console.log(req.body)
     const name = req.body.name;
     const number = req.body.number;
-    if (!name || !number) {
+    /*if (!name || !number) {
         return res.status(400).json({error: `required params name and number in request`});
-    }
+    }*/
     const new_person = new Person({name, number});
     new_person.save().then(result => {
         res.status(200).json(result);
@@ -63,7 +65,11 @@ app.put('/api/persons/:id', (req, res, next) => {
         name: req.body.name,
         number: req.body.number
     }
-    Person.findByIdAndUpdate(req.params.id, updated_person, {new: true}).then(result => {
+    Person.findByIdAndUpdate(
+        req.params.id,
+        updated_person,
+        { new: true, runValidators: true, context: 'query' }
+    ).then(result => {
         res.status(200).json(result.toJSON())
     }).catch(error => next(error))
 })
